@@ -5,49 +5,38 @@ function closeModal() {
   document.getElementById("modal").classList.add("hidden");
 };
 
-  function deleteData(entry){
-    console.log(entry);
+  function deleteData(email){
+    const indexOfElement = participants.map(p => p.email).indexOf(email);
+
+    document.getElementById('table').deleteRow(indexOfElement+1);
   };
 
-// array of object
-let options = [
-  {
-    name: "opt1",
-    email: "some@gmail.com"
-  },
-  {
-    name: "opt2",
-    email: "some2@gmail.com"
-  },
-  {
-    name: "opt3",
-    email: "some3@gmail.com"
-  },
-];
+  let participants = [];
 
-// selects the table to write in
+  function addParticipant(name, email){
+    participants.push({name: name, email: email});
+    this.createData(participants[participants.length - 1]);
+    this.closeModal();
+  }
+
 let table = document.querySelector("table");
 let tblBody = document.querySelector("tbody");
 
- for (let i = 0; i < options.length; i++) {
-
-    const row = document.createElement("tr");
-
-    for (let j = 0; j <= Object.keys(options[i]).length; j++) {
-      const cell = document.createElement("td");
+function createData(participant){
+        const row = document.createElement("tr");
+        row.setAttribute('id', participant.email);
+    
+        for (let j = 0; j <= Object.keys(participant).length; j++) {
+            const cell = document.createElement("td");
       
-      const cellText = document.createTextNode(options[i][Object.keys(options[i])[j]]);
+            if(j === Object.keys(participant).length) {
+              cell.innerHTML = `<button onclick=deleteData("${participant.email}") value="${participant.email}">Eliminar</button>`;
+            }else{
+              cell.innerHTML = `<td>${participant[Object.keys(participant)[j]]}</td>`;
+            }
+            row.appendChild(cell);
+        }
+    
+        tblBody.appendChild(row);
+}
 
-      if(j === Object.keys(options[i]).length) {
-        cell.innerHTML = `<button onclick=deleteData("${options[i].email}") value="${options[i].email}">Eliminar</button>`;
-      }else{
-        cell.appendChild(cellText);
-      }
-      row.appendChild(cell);
-    }
-
-    tblBody.appendChild(row);
-  };
-
-  // sets the border attribute of tbl to '2'
-  table.setAttribute("border", "2");
